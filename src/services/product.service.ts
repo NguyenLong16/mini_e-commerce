@@ -9,7 +9,7 @@ export const ProductService = {
         return response.data
     },
 
-    getProductById: async (id: string): Promise<Product[]> => {
+    getProductById: async (id: string): Promise<Product> => {
         const response = await axios.get(`${API_URL}/products/${id}`)
         return response.data
     },

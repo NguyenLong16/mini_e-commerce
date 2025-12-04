@@ -1,10 +1,23 @@
 import { Minus, Plus, Trash } from "lucide-react"
 import { useCartContext } from "../contexts/CartContext"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react"
+import CheckOutModal from "../components/CheckOutModal"
+import { useOrder } from "../contexts/OrderContext"
 
 const CartPage = () => {
 
     const { cartItem, removeFromCart, updateQuantity, clearCart, cartTotal } = useCartContext()
+    const { addOrder } = useOrder()
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    const navigate = useNavigate()
+
+    const handlePaymentSuccess = () => {
+        addOrder(cartItem, cartTotal)
+        clearCart()
+        setIsModalOpen(false)
+        navigate('/history')
+    }
 
     if (cartItem.length === 0) {
         return (
@@ -103,11 +116,20 @@ const CartPage = () => {
                             </div>
 
                             <button
+                                onClick={() => setIsModalOpen(true)}
                                 className="w-full py-4 bg-indigo-600 text-white rounde-xl font bold
                                 hover:bg-indigo-700 transition shadow-lg shadow-indigo-200"
                             >
                                 Thanh toán ngay
                             </button>
+
+                            {/* Modal thanh toán */}
+                            <CheckOutModal
+                                isOpen={isModalOpen}
+                                onClose={() => setIsModalOpen(false)}
+                                total={cartTotal}
+                                onConfirm={handlePaymentSuccess}
+                            />
 
                             <Link
                                 to='/'

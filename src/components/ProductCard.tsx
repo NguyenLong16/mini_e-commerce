@@ -28,7 +28,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                     <p className="text-xs text-gray-500 uppercase font-semibold mb-1">{product.category}</p>
 
                     <Link
-                        to={`product/${product.id}`}
+                        to={`products/${product.id}`}
                         className="font-medium text-gray-800 hover:text-indigo-600 line-clamp-2 mb-2 flex-grow"
                     >
                         {product.title}

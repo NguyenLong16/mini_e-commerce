@@ -1,4 +1,4 @@
-import { ShoppingBag } from "lucide-react"
+import { History, ShoppingBag } from "lucide-react"
 import { Link } from "react-router-dom"
 import { useCartContext } from "../contexts/CartContext"
 
@@ -15,17 +15,27 @@ const Navbar = () => {
                         MiniStore
                     </Link>
 
-                    <Link to='/cart' className="relative cursor-pointer">
-                        <ShoppingBag className="w-7 h-7 text-gray-700 hover:text-indigo-600 transition" />
-                        {cartCount > 0 && (
-                            <span
-                                className="absolute -top-1 -right-1 bg-red-500 text-white text-xs
-                            font-bold w-5 h-5 rounded-full flex items-center justify-center"
-                            >
-                                {cartCount}
-                            </span>
-                        )}
-                    </Link>
+                    <div className="flex items-center gap-3">
+
+                        {/* Giỏ hàng */}
+                        <Link to="/cart" className="relative cursor-pointer">
+                            <ShoppingBag className="w-7 h-7 text-gray-700 hover:text-indigo-600 transition" />
+
+                            {cartCount > 0 && (
+                                <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold
+                            w-5 h-5 rounded-full flex items-center justify-center">
+                                    {cartCount}
+                                </span>
+                            )}
+                        </Link>
+
+                        {/* Lịch sử đơn hàng */}
+                        <Link to="/history" className="cursor-pointer">
+                            <History className="w-7 h-7 text-gray-700 hover:text-indigo-600 transition" />
+                        </Link>
+
+                    </div>
+
                 </div>
             </nav>
         </>
