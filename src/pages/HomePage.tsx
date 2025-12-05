@@ -22,6 +22,10 @@ const HomePage = () => {
         dispatch(fetchProducts())
     }, [dispatch])
 
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, [currentPage])
+
     // Xử lý chọn category
     const handleFilter = (category: string) => {
         dispatch(setCategories(category))
