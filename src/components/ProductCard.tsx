@@ -2,10 +2,12 @@ import { ShoppingCart, Star } from "lucide-react"
 import { ProductCardProps } from "../types/product"
 import { Link } from "react-router-dom"
 import { useCartContext } from "../contexts/CartContext"
+import { useAppSelector } from "../hooks/useRedux"
 
 const ProductCard = ({ product }: ProductCardProps) => {
 
     const { addToCart } = useCartContext()
+    const { isAuthenticated } = useAppSelector(state => state.auth)
 
     return (
         <>
@@ -46,7 +48,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
                             className="bg-gray-100 hover:bg-indigo-600 hover:text-white text-gray-800 p-2 rounded-full transition"
                             onClick={() => addToCart(product)}
                         >
-                            <ShoppingCart className="w-5 h-5" />
+                            {isAuthenticated && (
+                                <ShoppingCart className="w-5 h-5" />
+                            )}
                         </button>
                     </div>
                 </div>
