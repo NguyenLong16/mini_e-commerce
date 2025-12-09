@@ -1,22 +1,29 @@
 import { Minus, Plus, Trash } from "lucide-react"
-import { useCartContext } from "../contexts/CartContext"
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import CheckOutModal from "../components/CheckOutModal"
 import { useOrder } from "../contexts/OrderContext"
+import { useAppSelector } from "../hooks/useRedux"
+import { useCartContext } from "../contexts/CartContext"
 
 const CartPage = () => {
 
     const { cartItem, removeFromCart, updateQuantity, clearCart, cartTotal } = useCartContext()
     const { addOrder } = useOrder()
+    const { currentUser } = useAppSelector(state => state.auth)
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const navigate = useNavigate()
 
     const handlePaymentSuccess = () => {
-        addOrder(cartItem, cartTotal)
-        clearCart()
-        setIsModalOpen(false)
-        navigate('/history')
+        if (currentUser) {
+            addOrder(cartItem, cartTotal, currentUser.id)
+            clearCart()
+            setIsModalOpen(false)
+            navigate('/history')
+        } else {
+            alert('Vui lòng đăng nhập lại')
+            navigate('/login')
+        }
     }
 
     if (cartItem.length === 0) {

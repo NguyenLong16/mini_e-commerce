@@ -16,9 +16,10 @@ const OrderContextProvider = ({ children }: { children: ReactNode }) => {
     }, [])
 
     //Hàm tạo đơn đặt hàng
-    const addOrder = (items: CartItem[], total: number) => {
+    const addOrder = (items: CartItem[], total: number, userId: number) => {
         const newOrder: Order = {
             id: `ORD-${Date.now()}`,
+            userId: userId,
             date: new Date().toLocaleString('vi-VN'),
             total: total,
             items: items,
