@@ -7,9 +7,11 @@ import OrderHistoryPage from "./pages/OrderHistoryPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import { useAppSelector } from "./hooks/useRedux";
+import SearchResultPage from "./pages/SearchResultPage";
 
 function App() {
   const { isAuthenticated } = useAppSelector(state => state.auth)
+
   return (
     <>
       <div className="min-h-screen bg-gray-50">
@@ -22,6 +24,7 @@ function App() {
           <Route path="cart" element={<CartPage />} />
           <Route path="products/:id" element={<ProductDetailPage />} />
           <Route path="history" element={<OrderHistoryPage />} />
+          <Route path="search" element={<SearchResultPage />} />
           <Route
             path="login"
             element={!isAuthenticated ? <LoginPage /> : <Navigate to="/" />}

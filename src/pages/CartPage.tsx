@@ -133,7 +133,7 @@ const CartPage = () => {
 
                             <Link
                                 to='/'
-                                className="block text-center mt-4 text-gray-500 hover:text-indigo-600 text-sm
+                                className="text-center mt-4 text-gray-500 hover:text-indigo-600 text-sm
                                 flex items-center justify-center gap-1"
                             >
                                 Tiếp tục mua sắm

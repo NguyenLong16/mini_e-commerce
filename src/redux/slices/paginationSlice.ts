@@ -65,6 +65,16 @@ const productSlice = createSlice({
                     p => p.category === action.payload
                 )
             }
+        },
+
+        searchProducts(state, action) {
+            const keyword = action.payload.toLowerCase()
+
+            state.filteredProducts = state.products.filter(
+                p => p.title.toLowerCase().includes(keyword)
+            )
+
+            state.currentPage = 1
         }
     },
 
@@ -98,5 +108,5 @@ const productSlice = createSlice({
     },
 })
 
-export const { setPage, setCategories } = productSlice.actions
+export const { setPage, setCategories, searchProducts } = productSlice.actions
 export default productSlice.reducer
