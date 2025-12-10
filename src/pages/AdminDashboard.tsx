@@ -1,6 +1,8 @@
+import UserManagement from "./UserManagement"
+
 const AdminDashboard = () => {
     return (
-        <div>Đây là trang admin</div>
+        <UserManagement />
     )
 }
 

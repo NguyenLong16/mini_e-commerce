@@ -6,15 +6,18 @@ import CartContextProvider from './contexts/CartContext.tsx';
 import OrderContextProvider from './contexts/OrderContext.tsx';
 import { Provider } from 'react-redux';
 import { store } from './redux/stores/store.ts';
+import { ToastProvider } from './contexts/ToastContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <CartContextProvider>
-        <OrderContextProvider>
-          <App />
-        </OrderContextProvider>
-      </CartContextProvider>
-    </BrowserRouter>
-  </Provider>
+  <ToastProvider>
+    <Provider store={store}>
+      <BrowserRouter>
+        <CartContextProvider>
+          <OrderContextProvider>
+            <App />
+          </OrderContextProvider>
+        </CartContextProvider>
+      </BrowserRouter>
+    </Provider>
+  </ToastProvider>
 );
