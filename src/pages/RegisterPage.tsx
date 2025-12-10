@@ -15,6 +15,7 @@ const RegisterPage = () => {
             fullname: "",
             email: "",
             password: "",
+            role: "User"
         },
         validationSchema: Yup.object({
             username: Yup.string()
@@ -106,6 +107,18 @@ const RegisterPage = () => {
                     {formik.touched.password && formik.errors.password && (
                         <p className="text-red-500 text-sm">{formik.errors.password}</p>
                     )}
+                </div>
+                <div>
+                    <label className="block mb-1 font-medium text-gray-700">Vai trò</label>
+                    <select
+                        name="role"
+                        value={formik.values.role}
+                        onChange={formik.handleChange}
+                        className="w-full p-2 border rounded-lg focus:outline-none focus:border-indigo-500 bg-white"
+                    >
+                        <option value="User">Khách hàng (User)</option>
+                        <option value="Admin">Quản trị viên (Admin)</option>
+                    </select>
                 </div>
 
                 {/* ERROR FROM SERVER */}
