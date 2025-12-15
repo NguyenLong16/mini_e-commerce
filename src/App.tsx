@@ -27,7 +27,7 @@ function App() {
           {/* --- PUBLIC ROUTES --- */}
           <Route path="/" element={<HomePage />} />
           <Route path="/search" element={<SearchResultPage />} />
-          <Route path="/product/:id" element={<ProductDetailPage />} />
+          <Route path="/products/:id" element={<ProductDetailPage />} />
 
           {/* Nếu đã login thì không cho vào Login/Register nữa */}
           <Route
