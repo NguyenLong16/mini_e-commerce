@@ -15,10 +15,8 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const { loading, error, isAuthenticated, currentUser } = useAppSelector(state => state.auth);
 
-    // 1. Kiểm tra nếu đã đăng nhập thì tự chuyển trang
     useEffect(() => {
         if (isAuthenticated && currentUser) {
-            // Chuyển role về chữ thường để so sánh an toàn (tránh lỗi Admin vs admin)
             const role = currentUser.role?.toLowerCase();
             if (role === 'admin') {
                 navigate('/admin');
@@ -35,14 +33,13 @@ const LoginPage = () => {
         validationSchema: LoginSchema,
         onSubmit: async (values) => {
             try {
-                // 2. Gọi API Login
                 const result = await dispatch(loginUser(values)).unwrap();
 
                 console.log("=== KẾT QUẢ ĐĂNG NHẬP ===");
                 console.log("Toàn bộ object result:", result);
-                console.log("Role nhận được:", result.role); // Kiểm tra xem nó là 'Admin', 'admin', hay undefined?
+                console.log("Role nhận được:", result.role);
                 console.log("Role sau khi toLowerCase:", result.role?.toLowerCase());
-                // 3. Điều hướng ngay sau khi login thành công
+
                 const role = result.role?.toLowerCase();
                 if (role === 'admin') {
                     navigate('/admin');
@@ -56,58 +53,74 @@ const LoginPage = () => {
     });
 
     return (
-        <div className="flex justify-center items-center h-screen bg-gray-100">
-            <div className="bg-white p-8 rounded-xl w-96 shadow-lg">
-                <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Đăng nhập</h2>
+        <div className="flex justify-center items-center h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl w-96 shadow-lg dark:shadow-2xl border border-gray-200 dark:border-gray-700 transition-all">
+                <h2 className="text-2xl font-bold text-center mb-6 text-gray-800 dark:text-white">
+                    Đăng nhập
+                </h2>
 
                 {error && (
-                    <div className="text-red-600 bg-red-100 p-3 rounded mb-4 text-sm text-center">
+                    <div className="text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30 p-3 rounded mb-4 text-sm text-center border border-red-200 dark:border-red-800">
                         {error}
                     </div>
                 )}
 
                 <form onSubmit={formik.handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-gray-600 mb-1 font-medium">Tài khoản</label>
+                        <label className="block text-gray-600 dark:text-gray-300 mb-1 font-medium">
+                            Tài khoản
+                        </label>
                         <input
                             type="text"
                             name="username"
                             onChange={formik.handleChange}
                             value={formik.values.username}
-                            className="w-full p-2 border rounded-lg focus:outline-none focus:border-indigo-500"
+                            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors"
                         />
                         {formik.errors.username && formik.touched.username && (
-                            <div className="text-red-500 text-sm mt-1">{formik.errors.username}</div>
+                            <div className="text-red-500 dark:text-red-400 text-sm mt-1">
+                                {formik.errors.username}
+                            </div>
                         )}
                     </div>
 
                     <div>
-                        <label className="block text-gray-600 mb-1 font-medium">Mật khẩu</label>
+                        <label className="block text-gray-600 dark:text-gray-300 mb-1 font-medium">
+                            Mật khẩu
+                        </label>
                         <input
                             type="password"
                             name="password"
                             onChange={formik.handleChange}
                             value={formik.values.password}
-                            className="w-full p-2 border rounded-lg focus:outline-none focus:border-indigo-500"
+                            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors"
                         />
                         {formik.errors.password && formik.touched.password && (
-                            <div className="text-red-500 text-sm mt-1">{formik.errors.password}</div>
+                            <div className="text-red-500 dark:text-red-400 text-sm mt-1">
+                                {formik.errors.password}
+                            </div>
                         )}
                     </div>
 
                     <button
                         type="submit"
                         disabled={loading}
-                        className={`w-full text-white py-2 rounded transition font-bold 
-                            ${loading ? 'bg-indigo-300 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'}`}
+                        className={`w-full text-white py-2 rounded-lg transition font-bold 
+                            ${loading
+                                ? 'bg-indigo-400 dark:bg-indigo-500 cursor-not-allowed'
+                                : 'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600'
+                            }`}
                     >
                         {loading ? "Đang xử lý..." : "Đăng nhập"}
                     </button>
                 </form>
 
-                <div className="mt-4 text-center text-sm text-gray-600">
-                    Chưa có tài khoản?
-                    <Link to="/register" className="text-indigo-600 font-bold hover:underline ml-1">
+                <div className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
+                    Chưa có tài khoản?{" "}
+                    <Link
+                        to="/register"
+                        className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline"
+                    >
                         Đăng ký
                     </Link>
                 </div>

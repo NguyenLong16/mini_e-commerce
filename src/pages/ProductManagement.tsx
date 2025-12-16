@@ -7,6 +7,7 @@ import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined, UploadOutli
 import type { UploadFile, UploadProps } from "antd/es/upload/interface";
 import TextArea from "antd/es/input/TextArea"
 import { Option } from "antd/es/mentions"
+import { set } from "date-fns"
 
 const ProductManagement = () => {
     const [products, setProducts] = useState<Product[]>([])
@@ -16,6 +17,55 @@ const ProductManagement = () => {
     const [fileList, setFileList] = useState<UploadFile[]>([])
     const [form] = Form.useForm()
     const categories = ["electronics", "jewelery", "men's clothing", "women's clothing"];
+    const [searchFilters, setSearchFilters] = useState<{
+        title?: string;
+        category: string | undefined;
+        priceFrom: number | null;
+        priceTo: number | null
+    }>({
+        title: '',
+        category: undefined,
+        priceFrom: null,
+        priceTo: null
+    })
+
+    const handleSearch = (key: string, value: any) => {
+        setSearchFilters(prev => ({
+            ...prev,
+            [key]: value ?? undefined
+        }))
+    }
+
+    const handleResetSearch = () => {
+        setSearchFilters({
+            title: '',
+            category: undefined,
+            priceFrom: null,
+            priceTo: null
+        })
+    }
+
+    const filteredProducts = products.filter(product => {
+        const matchesTitle = searchFilters.title
+            ? product.title.toLowerCase().includes(searchFilters.title.toLowerCase())
+            : true
+
+        const matchesCategory = searchFilters.category
+            ? product.category === searchFilters.category
+            : true
+
+        const matchesPriceFrom = searchFilters.priceFrom !== null
+            ? product.price >= searchFilters.priceFrom
+            : true
+
+        const matchesPriceTo = searchFilters.priceTo !== null
+            ? product.price <= searchFilters.priceTo
+            : true
+
+        return matchesTitle && matchesCategory && matchesPriceFrom && matchesPriceTo
+    })
+
+
     const fetchProducts = async () => {
         try {
             setLoading(true)
@@ -199,20 +249,89 @@ const ProductManagement = () => {
 
                 {/* BẢNG DỮ LIỆU ANTD */}
                 <Card bordered={false} className="shadow-sm rounded-xl overflow-hidden">
-                    <div className="flex justify-end mb-4">
-                        <Input
-                            placeholder="Tìm kiếm sản phẩm..."
-                            prefix={<SearchOutlined />}
-                            className="w-64"
-                            onChange={(e) => {
-                                // Logic tìm kiếm client-side đơn giản (nếu cần)
-                            }}
-                        />
+                    {/* SEARCH & FILTER */}
+                    <div className="mb-6 rounded-xl bg-white p-4 shadow-sm border border-gray-100">
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+
+                            {/* Search title */}
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-600 mb-1">
+                                    Tên sản phẩm
+                                </label>
+                                <Input
+                                    placeholder="Nhập tên sản phẩm..."
+                                    prefix={<SearchOutlined />}
+                                    value={searchFilters.title}
+                                    onChange={(e) => handleSearch('title', e.target.value)}
+                                />
+                            </div>
+
+                            {/* Category */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">
+                                    Danh mục
+                                </label>
+                                <Select
+                                    placeholder="Chọn danh mục"
+                                    allowClear
+                                    className="w-full"
+                                    value={searchFilters.category}
+                                    onChange={(value) => handleSearch('category', value)}
+                                >
+                                    {categories.map(c => (
+                                        <Select.Option key={c} value={c}>
+                                            {c.charAt(0).toUpperCase() + c.slice(1)}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </div>
+
+                            {/* Price from */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">
+                                    Giá từ
+                                </label>
+                                <InputNumber
+                                    className="w-full"
+                                    min={0}
+                                    placeholder="$"
+                                    value={searchFilters.priceFrom ?? undefined}
+                                    onChange={(value) => handleSearch('priceFrom', value)}
+                                />
+                            </div>
+
+                            {/* Price to */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-600 mb-1">
+                                    Giá đến
+                                </label>
+                                <InputNumber
+                                    className="w-full"
+                                    min={0}
+                                    placeholder="$"
+                                    value={searchFilters.priceTo ?? undefined}
+                                    onChange={(value) => handleSearch('priceTo', value)}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Actions */}
+                        {(searchFilters.title ||
+                            searchFilters.category ||
+                            searchFilters.priceFrom !== null ||
+                            searchFilters.priceTo !== null) && (
+                                <div className="flex justify-end mt-4">
+                                    <Button onClick={handleResetSearch}>
+                                        Xóa bộ lọc
+                                    </Button>
+                                </div>
+                            )}
                     </div>
+
 
                     <Table
                         columns={columns}
-                        dataSource={products}
+                        dataSource={filteredProducts}
                         rowKey="id"
                         loading={loading}
                         pagination={{ pageSize: 5 }}

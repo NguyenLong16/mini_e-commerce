@@ -10,7 +10,6 @@ const HomePage = () => {
 
     const {
         filteredProducts,
-        categories,
         loading,
         currentPage,
         itemsPerPage,
@@ -35,6 +34,7 @@ const HomePage = () => {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
     const totalPage = Math.ceil(filteredProducts.length / itemsPerPage);
+    const categories = ["electronics", "jewelery", "men's clothing", "women's clothing"];
 
     const paginate = (page: number) => dispatch(setPage(page));
 
@@ -76,7 +76,7 @@ const HomePage = () => {
             <div className="max-w-7xl mx-auto px-4 py-8">
                 <div className="flex flex-col lg:flex-row justify-between items-center mb-8 gap-6">
                     <div>
-                        <h1 className="text-4xl font-bold text-gray-900">
+                        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
                             Sản phẩm nổi bật
                         </h1>
                         <p className="text-gray-600 mt-2">

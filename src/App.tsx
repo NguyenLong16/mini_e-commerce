@@ -1,7 +1,10 @@
-// ... các import khác
+// App.tsx
+import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
-import AdminLayout from "./components/AdminLayout";     // Thêm dòng này
-import AdminDashboard from "./pages/AdminDashboard";   // Trang dashboard chính
+import "react-toastify/dist/ReactToastify.css"; // Đảm bảo import CSS toast
+
+import AdminLayout from "./components/AdminLayout";
+import AdminDashboard from "./pages/AdminDashboard";
 import UserManagement from "./pages/UserManagement";
 import Navbar from "./components/Navbar";
 import { Routes, Route } from "react-router-dom";
@@ -17,20 +20,42 @@ import RegisterPage from "./pages/RegisterPage";
 import ProductManagement from "./pages/ProductManagement";
 
 function App() {
+  // Áp dụng theme từ localStorage khi app load
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
   return (
     <>
-      <ToastContainer />
-      <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
-        <Navbar />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored" // sẽ tự theo dark/light nếu có class dark
+      />
+
+      {/* Wrapper chính - áp dụng bg và text mặc định cho toàn app */}
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+        <Navbar /> {/* Navbar sẽ có nút toggle */}
 
         <Routes>
           {/* PUBLIC ROUTES */}
           <Route path="/" element={<HomePage />} />
           <Route path="/search" element={<SearchResultPage />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
-          {/* ... login/register như cũ */}
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
           {/* USER PRIVATE ROUTES */}
           <Route element={<PrivateRoute />}>
@@ -38,13 +63,12 @@ function App() {
             <Route path="/history" element={<OrderHistoryPage />} />
           </Route>
 
-          {/* ADMIN ROUTES - Dùng chung layout */}
+          {/* ADMIN ROUTES */}
           <Route element={<AdminRoute />}>
             <Route element={<AdminLayout />}>
-              <Route path="/admin" element={<AdminDashboard />} />        {/* Trang tổng quan */}
-              <Route path="/admin/users" element={<UserManagement />} />  {/* Quản lý user */}
-              <Route path="/admin/products" element={<ProductManagement />} />  {/* Quản lý sản phẩm */}
-              {/* Thêm các route admin khác ở đây sau này */}
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/users" element={<UserManagement />} />
+              <Route path="/admin/products" element={<ProductManagement />} />
             </Route>
           </Route>
         </Routes>
