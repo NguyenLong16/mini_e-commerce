@@ -1,9 +1,15 @@
-import UserManagement from "./UserManagement"
-
 const AdminDashboard = () => {
     return (
-        <UserManagement />
-    )
-}
+        <div>
+            <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
 
-export default AdminDashboard
+            <p className="text-gray-600">
+                Chào mừng bạn đến trang quản trị hệ thống.
+            </p>
+
+            {/* sau này thêm card, chart, thống kê ở đây */}
+        </div>
+    );
+};
+
+export default AdminDashboard;

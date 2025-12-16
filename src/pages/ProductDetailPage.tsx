@@ -4,6 +4,8 @@ import { ProductService } from '../services/product.service';
 import { Product } from '../types/product';
 import { Star, ShoppingCart, ArrowLeft, Truck, ShieldCheck } from 'lucide-react';
 import { useCartContext } from '../contexts/CartContext';
+import { useSelector } from 'react-redux';
+import { useAppSelector } from '../hooks/useRedux';
 
 const ProductDetailPage = () => {
     const { id } = useParams(); // Lấy ID từ URL
@@ -12,6 +14,7 @@ const ProductDetailPage = () => {
 
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
+    const { isAuthenticated } = useAppSelector(state => state.auth)
 
     // Fetch dữ liệu chi tiết sản phẩm
     useEffect(() => {
@@ -108,13 +111,15 @@ const ProductDetailPage = () => {
                     </div>
 
                     <div className="mt-auto">
-                        <button
-                            onClick={() => addToCart(product)}
-                            className="w-full py-4 bg-indigo-600 text-white rounded-xl font-bold text-lg hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 active:scale-95"
-                        >
-                            <ShoppingCart className="w-6 h-6" />
-                            Thêm vào giỏ hàng
-                        </button>
+                        {isAuthenticated && (
+                            <button
+                                onClick={() => addToCart(product)}
+                                className="w-full py-4 bg-indigo-600 text-white rounded-xl font-bold text-lg hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 active:scale-95"
+                            >
+                                <ShoppingCart className="w-6 h-6" />
+                                Thêm vào giỏ hàng
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

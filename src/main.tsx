@@ -7,6 +7,8 @@ import OrderContextProvider from './contexts/OrderContext.tsx';
 import { Provider } from 'react-redux';
 import { store } from './redux/stores/store.ts';
 import { ToastProvider } from './contexts/ToastContext.tsx';
+import 'antd/dist/reset.css';
+
 
 createRoot(document.getElementById('root')!).render(
   <ToastProvider>
